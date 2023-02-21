@@ -1,0 +1,40 @@
+version: '3.7'
+
+services:
+  database_omungaNet: 
+    image: postgres
+    container_name:  omungaNet-db
+    restart: always
+    ports:
+      - 5432:5432
+    environment:
+      - POSTGRES_USER=omungaNet
+      - POSTGRES_PASSWORD=omungaNet
+      - POSTGRES_DB=omungaNet
+    volumes:
+      - pgdata:/data/postgres
+    network_mode: host
+  app:
+    build: .
+    container_name: omungaNet-api
+    tty: true
+    ports:
+      - 3000:3000
+    restart: always
+    volumes:
+      - ./:/app
+    network_mode: host
+    depends_on:
+      - database_omungaNet
+    
+  Redis_omungaNet:
+    image: sameersbn/redis:4.0.9-3
+    ports:
+      - "6379:6379"
+    volumes:
+      - /srv/docker/redis:/var/lib/redis
+    restart: always
+
+volumes:
+  pgdata:
+    
