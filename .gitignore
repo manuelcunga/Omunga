@@ -1,0 +1,7 @@
+.env
+build
+temp/
+  build-errors.log
+  main
+Api.http
+ 
