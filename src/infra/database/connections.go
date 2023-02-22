@@ -11,7 +11,7 @@ import (
 	"gorm.io/gorm"
 )
 
-func Init() *gorm.DB {
+func Connection() *gorm.DB {
 
 	e := godotenv.Load() //Load .env file
 	if e != nil {
@@ -25,6 +25,12 @@ func Init() *gorm.DB {
 
 	DSN := fmt.Sprintf("host=%s user=%s dbname=%s sslmode=disable password=%s", dbHost, username, dbName, password)
 	DB, err := gorm.Open(postgres.Open(DSN), &gorm.Config{})
+
+	// dbPath := os.Getenv("./")
+	// DB, err := gorm.Open(sqlite.Open(dbPath), &gorm.Config{})
+	if err != nil {
+		panic("failed to connect database")
+	}
 
 	if err != nil {
 		panic("failed to connect database")
