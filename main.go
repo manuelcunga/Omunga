@@ -1,7 +1,14 @@
 package main
 
-import "fmt"
+import (
+	"github.com/labstack/echo"
+	"github.com/manuelcunga/Omunga/src/routes"
+)
 
 func main() {
-	fmt.Println("Omunga back end")
+	app := echo.New()
+	routes.Home(app)
+	routes.Setup(app)
+
+	app.Logger.Fatal(app.Start(":4000"))
 }
