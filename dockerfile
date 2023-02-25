@@ -1,15 +1,29 @@
-FROM golang:1.19
+# Imagem para desenvolvimento
+FROM golang:1.19 AS dev
 
 WORKDIR /app
 
-COPY . .
+# Instalação do nodejs e nodemon
+RUN apt-get update && apt-get install -y nodejs npm
+RUN npm install -g nodemon
 
+COPY go.mod go.sum ./
 RUN go mod download
 
-RUN curl -fLo install.sh https://raw.githubusercontent.com/cosmtrek/air/master/install.sh && \
-    chmod +x install.sh && sh install.sh && cp ./bin/air /bin/air
+COPY . .
 
-ARG BUILD_FLAGS
-RUN go build ${BUILD_FLAGS} -o /app/main
+CMD ["nodemon", "-L", "--exec", "go", "run", "main.go"]
 
-CMD air start
+# Imagem para produção
+# FROM golang:1.19 AS prod
+
+# WORKDIR /app
+
+# COPY go.mod go.sum ./
+# RUN go mod download
+
+# COPY . .
+
+# RUN CGO_ENABLED=0 GOOS=linux go build -a -installsuffix cgo -o app .
+
+# CMD ["main"]
