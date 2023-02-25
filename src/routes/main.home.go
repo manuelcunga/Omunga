@@ -20,7 +20,6 @@ func Home(app *echo.Group) {
 
 func Setup(app *echo.Echo) {
 	api := app.Group("/api/v1")
-	app.Group("/api/v1")
 	Home(api)
 	UserRoutes(api)
 }
