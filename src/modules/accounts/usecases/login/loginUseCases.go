@@ -31,7 +31,7 @@ func (userRepo *CreateUserRepository) Login(email, password string) (string, err
 		return "", fmt.Errorf("Email ou palavra passe errada...")
 	}
 
-	if err := bcrypt.CompareHashAndPassword([]byte(user.PASSWORD), []byte(password)); err != nil {
+	if err := bcrypt.CompareHashAndPassword([]byte(user.Password), []byte(password)); err != nil {
 		return "", fmt.Errorf("Email ou palavra passe errada..., ")
 	}
 

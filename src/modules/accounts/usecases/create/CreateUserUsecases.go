@@ -19,19 +19,30 @@ func NewUserUseCase(userRepo repositories.ICreateUserRepository) CreateUserUseCa
 
 func (userUseCase *CreateUserUseCases) Execute(data *dtos.CreateUserDTO) (*entities.User, error) {
 
-	hashedPassword, err := bcrypt.GenerateFromPassword([]byte(data.PASSWORD), bcrypt.DefaultCost)
+	existingUser, err := userUseCase.userRepository.FindByEmail(data.Email)
 
 	if err != nil {
-		return nil, errors.New("failed to encrypt password")
+		return nil, err
 	}
+
+	if existingUser != nil {
+		return nil, errors.New("Ups, este usuário já existe!")
+	}
+
+	hashedPassword, err := bcrypt.GenerateFromPassword([]byte(data.Password), bcrypt.DefaultCost)
+
+	if err != nil {
+		return nil, errors.New("falha ao criptografar a senha")
+	}
+
 	user := &entities.User{
-		FIRST_NAME: data.FIRST_NAME,
-		LAST_NAME:  data.LAST_NAME,
-		EMAIL:      data.EMAIL,
-		PHONE:      data.PHONE,
-		PASSWORD:   string(hashedPassword),
-		BIO:        data.BIO,
-		PHOTO:      nil,
+		FirstName: data.FirstName,
+		LastName:  data.LastName,
+		Email:     data.Email,
+		Phone:     data.Phone,
+		Password:  string(hashedPassword),
+		Bio:       data.Bio,
+		Photo:     nil,
 	}
 
 	err = userUseCase.userRepository.Create(user)

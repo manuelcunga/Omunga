@@ -6,7 +6,7 @@ import (
 	"github.com/manuelcunga/Omunga/src/modules/accounts/factory"
 )
 
-func UserRoutes(e *echo.Echo) {
+func UserRoutes(e *echo.Group) {
 	userFactory := factory.NewUserUseCase()
 	createUserController := controller.NewUserController(userFactory)
 	e.POST("/user/create", createUserController.CreateUser())

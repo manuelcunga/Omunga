@@ -43,45 +43,44 @@ func (users *UserRepository) FindAll() ([]*entities.User, error) {
 
 func (userRepo *UserRepository) FindByEmail(email string) (*entities.User, error) {
 
-	user := &entities.User{}
-
-	result := userRepo.Db.Where("email = ?", email).First(user)
-
+	var user entities.User
+	result := userRepo.Db.Where("email = ?", email).First(&user)
 	if result.Error != nil {
-
 		if errors.Is(result.Error, gorm.ErrRecordNotFound) {
-
-			return nil, fmt.Errorf("Ups, usuário não encontrado '%s' not found", email)
+			return nil, nil
 		}
 		return nil, result.Error
 	}
-	return user, nil
+	return &user, nil
+}
+
+func (userRepo *UserRepository) FindById(id string) (error, *entities.User) {
+
+	user := &entities.User{}
+	result := userRepo.Db.Where("id = ?", id).First(user)
+	if result.Error != nil {
+		if errors.Is(result.Error, gorm.ErrRecordNotFound) {
+			return fmt.Errorf("Usuário não encontrado"), nil
+		}
+		return result.Error, nil
+	}
+	return nil, user
+
+}
+
+func (userRepo *UserRepository) Update(user *entities.User) (error, *entities.User) {
+
+	result := userRepo.Db.Save(user)
+	if result.Error != nil {
+		return result.Error, nil
+	}
+	return nil, user
 }
 
 func (userRepo *UserRepository) Delete(id string) (error, *entities.User) {
 
 	user := &entities.User{}
 	result := userRepo.Db.Where("id = ?", id).Delete(user)
-	if result.Error != nil {
-		return result.Error, nil
-	}
-	return nil, user
-}
-
-func (userRepo *UserRepository) FindById(id string) (error, *entities.User) {
-	user := &entities.User{}
-	result := userRepo.Db.Where("id = ?", id).First(user)
-	if result.Error != nil {
-		if errors.Is(result.Error, gorm.ErrRecordNotFound) {
-			return fmt.Errorf("user with id '%s' not found", id), nil
-		}
-		return result.Error, nil
-	}
-	return nil, user
-}
-
-func (userRepo *UserRepository) Update(user *entities.User) (error, *entities.User) {
-	result := userRepo.Db.Save(user)
 	if result.Error != nil {
 		return result.Error, nil
 	}
