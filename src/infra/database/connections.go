@@ -9,6 +9,7 @@ import (
 	"github.com/manuelcunga/Omunga/src/modules/accounts/infra/entities"
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
+	"gorm.io/gorm/logger"
 )
 
 func Connection() *gorm.DB {
@@ -38,7 +39,7 @@ func Connection() *gorm.DB {
 	}
 
 	fmt.Println("Connection Opened to Database")
-
+	DB.Logger.LogMode(logger.Silent)
 	DB.AutoMigrate(entities.User{})
 
 	log.Println("Connected to database...")
