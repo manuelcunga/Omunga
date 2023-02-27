@@ -4,8 +4,10 @@ import (
 	"github.com/manuelcunga/Omunga/src/infra/database"
 	repositories "github.com/manuelcunga/Omunga/src/modules/accounts/repositories/implementations"
 	usecases "github.com/manuelcunga/Omunga/src/modules/accounts/usecases/create"
+	deleteUser "github.com/manuelcunga/Omunga/src/modules/accounts/usecases/delete"
 	findAllUsers "github.com/manuelcunga/Omunga/src/modules/accounts/usecases/findAll"
 	findOneUsers "github.com/manuelcunga/Omunga/src/modules/accounts/usecases/findOne"
+	LoginUser "github.com/manuelcunga/Omunga/src/modules/accounts/usecases/login"
 	updateUser "github.com/manuelcunga/Omunga/src/modules/accounts/usecases/update"
 )
 
@@ -32,4 +34,14 @@ func NewFindOneUserUseCases() findOneUsers.FindOndeUserUseCases {
 func NewUpdateUserUsecases() updateUser.UpdateUserUseCases {
 	repo := repositories.NewUserRepository(database.Connection())
 	return updateUser.NewUpdateUserUseCases(repo)
+}
+
+func NewDeleteUserUseCases() deleteUser.DeleteUserUseCases {
+	repo := repositories.NewUserRepository(database.Connection())
+	return deleteUser.NewDeleteUserUseCases(repo)
+}
+
+func NewLoginUseCases() LoginUser.LoginUseCases {
+	repo := repositories.NewUserRepository(database.Connection())
+	return LoginUser.NewLoginUseCases(repo)
 }
