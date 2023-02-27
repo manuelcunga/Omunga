@@ -20,10 +20,15 @@ func (userRepo *CreateUserRepository) GetCurrentUser(w http.ResponseWriter, r *h
 	}
 
 	// Buscar as informações completas do usuário correspondente no banco de dados
-	user, err := userRepo.userRepository.FindById(userID)
-	if err != nil {
-		return err, nil
-	}
+	// user, err := userRepo.userRepository.FindById(userID)
+	// if err != nil {
+	// 	return err, nil
+	// }
 
-	return nil, user
+	// return nil, user
+	foundUser, err := userRepo.userRepository.FindById(userID)
+	if err != nil {
+		return nil, err
+	}
+	return foundUser, nil
 }
