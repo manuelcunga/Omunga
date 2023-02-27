@@ -10,5 +10,5 @@ type ICreateUserRepository interface {
 	FindById(userId string) (*entities.User, error)
 	FindByEmail(email string) (*entities.User, error)
 	Update(userId string, user *entities.User) (error, *entities.User)
-	Delete(id string) (error, *entities.User)
+	Delete(id string) error
 }
