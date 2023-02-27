@@ -7,8 +7,8 @@ import (
 type ICreateUserRepository interface {
 	Create(data *entities.User) error
 	FindAll() ([]*entities.User, error)
-	FindById(id string) (error, *entities.User)
+	FindById(userId string) (*entities.User, error)
 	FindByEmail(email string) (*entities.User, error)
-	Update(user *entities.User) (error, *entities.User)
+	Update(userId string, user *entities.User) (error, *entities.User)
 	Delete(id string) (error, *entities.User)
 }
