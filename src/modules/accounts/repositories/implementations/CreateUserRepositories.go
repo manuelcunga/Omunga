@@ -2,7 +2,6 @@ package repositories
 
 import (
 	"errors"
-	"fmt"
 
 	"github.com/manuelcunga/Omunga/src/modules/accounts/infra/entities"
 	repositories "github.com/manuelcunga/Omunga/src/modules/accounts/repositories/interfaces"
@@ -54,21 +53,19 @@ func (userRepo *UserRepository) FindByEmail(email string) (*entities.User, error
 	return &user, nil
 }
 
-func (userRepo *UserRepository) FindById(id string) (error, *entities.User) {
-
+func (users *UserRepository) FindById(userId string) (*entities.User, error) {
 	user := &entities.User{}
-	result := userRepo.Db.Where("id = ?", id).First(user)
-	if result.Error != nil {
-		if errors.Is(result.Error, gorm.ErrRecordNotFound) {
-			return fmt.Errorf("Usuário não encontrado"), nil
-		}
-		return result.Error, nil
-	}
-	return nil, user
 
+	err := users.Db.First(user, "id = ?", userId).Error
+
+	if err != nil {
+		return nil, err
+	}
+
+	return user, nil
 }
 
-func (userRepo *UserRepository) Update(user *entities.User) (error, *entities.User) {
+func (userRepo *UserRepository) Update(userId string, user *entities.User) (error, *entities.User) {
 
 	result := userRepo.Db.Save(user)
 	if result.Error != nil {
