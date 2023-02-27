@@ -74,12 +74,10 @@ func (userRepo *UserRepository) Update(userId string, user *entities.User) (erro
 	return nil, user
 }
 
-func (userRepo *UserRepository) Delete(id string) (error, *entities.User) {
-
-	user := &entities.User{}
-	result := userRepo.Db.Where("id = ?", id).Delete(user)
+func (userRepo *UserRepository) Delete(id string) error {
+	result := userRepo.Db.Where("id = ?", id).Delete(&entities.User{})
 	if result.Error != nil {
-		return result.Error, nil
+		return result.Error
 	}
-	return nil, user
+	return nil
 }
