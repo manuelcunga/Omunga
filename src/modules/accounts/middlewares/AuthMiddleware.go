@@ -8,14 +8,14 @@ import (
 	"strings"
 
 	"github.com/golang-jwt/jwt"
-	"github.com/labstack/echo/v4"
+	"github.com/labstack/echo"
 )
 
 func AuthMiddleware(next echo.HandlerFunc) echo.HandlerFunc {
 	return func(c echo.Context) error {
 		authHeader := c.Request().Header.Get("Authorization")
 		if authHeader == "" {
-			return c.String(http.StatusUnauthorized, "Authorization header is required")
+			return c.String(http.StatusUnauthorized, "É necessário estar logado, faça o login")
 		}
 
 		tokenString := strings.TrimPrefix(authHeader, "Bearer ")
@@ -24,20 +24,32 @@ func AuthMiddleware(next echo.HandlerFunc) echo.HandlerFunc {
 		})
 
 		if err != nil {
-			return c.String(http.StatusUnauthorized, "Invalid token")
+			return c.String(http.StatusUnauthorized, "Token inválido")
 		}
 
 		if claims, ok := token.Claims.(*jwt.StandardClaims); ok && token.Valid {
 			userID, err := strconv.Atoi(claims.Subject)
 			if err != nil {
-				return c.String(http.StatusInternalServerError, "Invalid user ID in token")
+				return c.String(http.StatusInternalServerError, "ID de usuário inválido no token")
+			}
+
+			if err != nil {
+				return c.String(http.StatusInternalServerError, "ID de usuário inválido no token")
 			}
 
 			ctx := context.WithValue(c.Request().Context(), "userID", userID)
 			c.SetRequest(c.Request().WithContext(ctx))
 			return next(c)
 		} else {
-			return c.String(http.StatusUnauthorized, "Invalid token")
+			return c.String(http.StatusUnauthorized, "Token inválido")
+		}
+	}
+}
+
+func AuthMiddlewareFunc() echo.MiddlewareFunc {
+	return func(next echo.HandlerFunc) echo.HandlerFunc {
+		return func(c echo.Context) error {
+			return AuthMiddleware(next)(c)
 		}
 	}
 }
