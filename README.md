@@ -29,7 +29,7 @@ as well as comment, like, search, and even publish a forum discution
 
 ``` 
 
-# Using DOCKER
+### Using DOCKER
 
 1. `docker-compose build/sudo docker-compose build` - on windows/Linux
 2. `docker-compose up -d/sudo docker-compose up -d` - To Run container in backGround
