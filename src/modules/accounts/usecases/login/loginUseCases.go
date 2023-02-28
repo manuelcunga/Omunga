@@ -38,11 +38,13 @@ func (loginUseCases *LoginUseCases) Login(data *dtos.LoginDTO) (string, error) {
 	}
 
 	expirationTime := time.Now().Add(24 * time.Hour)
+
 	claims := &UserClaims{
 		ID:        user.ID,
 		Email:     data.Email,
 		ExpiresAt: expirationTime.Unix(),
 		StandardClaims: jwt.StandardClaims{
+			Subject:   user.ID,
 			ExpiresAt: expirationTime.Unix(),
 		},
 	}
