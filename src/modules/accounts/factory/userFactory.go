@@ -8,6 +8,8 @@ import (
 	findAllUsers "github.com/manuelcunga/Omunga/src/modules/accounts/usecases/findAll"
 	findOneUsers "github.com/manuelcunga/Omunga/src/modules/accounts/usecases/findOne"
 	LoginUser "github.com/manuelcunga/Omunga/src/modules/accounts/usecases/login"
+	meUsecase "github.com/manuelcunga/Omunga/src/modules/accounts/usecases/me"
+	userProfile "github.com/manuelcunga/Omunga/src/modules/accounts/usecases/profile"
 	updateUser "github.com/manuelcunga/Omunga/src/modules/accounts/usecases/update"
 )
 
@@ -44,4 +46,14 @@ func NewDeleteUserUseCases() deleteUser.DeleteUserUseCases {
 func NewLoginUseCases() LoginUser.LoginUseCases {
 	repo := repositories.NewUserRepository(database.Connection())
 	return LoginUser.NewLoginUseCases(repo)
+}
+
+func NewProfileUseCases() userProfile.ProfileUseCases {
+	repo := repositories.NewUserRepository(database.Connection())
+	return userProfile.NewProfileUseCases(repo)
+}
+
+func NewMeUseCases() meUsecase.MeUseCases {
+	repo := repositories.NewUserRepository(database.Connection())
+	return meUsecase.NewMeUseCases(repo)
 }
