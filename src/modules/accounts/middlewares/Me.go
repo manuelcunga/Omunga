@@ -3,14 +3,23 @@ package middlewares
 import (
 	"net/http"
 
-	"github.com/labstack/echo/v4"
+	"github.com/labstack/echo"
 )
 
-func Me(c echo.Context) error {
-	user := c.Get("user")
-	if user != nil {
-		return c.JSON(http.StatusOK, map[string]interface{}{"user": user})
-	} else {
-		return echo.NewHTTPError(http.StatusUnauthorized, "Unauthorized")
+func MeMiddlewareFunc() func(http.Handler) http.Handler {
+	return func(next http.Handler) http.Handler {
+		return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+			c := r.Context()
+			user := c.Value("user")
+			if user != nil {
+				next.ServeHTTP(w, r)
+			} else {
+				http.Error(w, "Unauthorized", http.StatusUnauthorized)
+			}
+		})
 	}
+}
+
+func Me() echo.MiddlewareFunc {
+	return echo.WrapMiddleware(MeMiddlewareFunc())
 }
