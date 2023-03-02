@@ -17,7 +17,7 @@ func NewMeController(meUseCases usecases.MeUseCases) MeController {
 
 func (meController *MeController) Me() echo.HandlerFunc {
 	return func(c echo.Context) error {
-		userID, ok := c.Get("id").(string)
+		userID, ok := c.Request().Context().Value("userID").(string)
 		if !ok {
 			return c.JSON(http.StatusInternalServerError, map[string]string{"error": "userID not found or is not a string"})
 		}
