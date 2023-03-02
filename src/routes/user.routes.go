@@ -48,6 +48,6 @@ func UserRoutes(e *echo.Group) {
 	e.PATCH("/user/:id", updateUser.UpdateUser())
 	e.DELETE("/user/:id", deleteUser.DeleteUser())
 	e.GET("/user/profile/:id", profile.Profile())
-	e.GET("/user/me", echo.HandlerFunc(meUserController.Me), middlewares.Me())
+	e.GET("/user/me", meUserController.Me())
 
 }
